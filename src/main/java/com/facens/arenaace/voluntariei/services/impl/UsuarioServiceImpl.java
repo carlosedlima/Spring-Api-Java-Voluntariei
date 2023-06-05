@@ -38,14 +38,12 @@ public class UsuarioServiceImpl implements UsuarioServiceUseCase {
 
     @Override
     public UsuarioDTO obterUsuarioPorId(Integer id) {
-        return usuarioRepository.findById(id).map(u -> {
-            return UsuarioDTO
-                    .builder()
-                    .email(u.getEmail())
-                    .nome(u.getNome())
-                    .cpf(u.getCpf())
-                    .build();
-        })
+        return usuarioRepository.findById(id).map(u -> UsuarioDTO
+                .builder()
+                .email(u.getEmail())
+                .nome(u.getNome())
+                .cpf(u.getCpf())
+                .build())
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
     }
 

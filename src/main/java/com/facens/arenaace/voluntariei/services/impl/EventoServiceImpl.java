@@ -1,8 +1,11 @@
 package com.facens.arenaace.voluntariei.services.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.facens.arenaace.voluntariei.dto.AjudaDTO;
 import com.facens.arenaace.voluntariei.dto.EventoDTO;
+import com.facens.arenaace.voluntariei.entity.Ajuda;
 import com.facens.arenaace.voluntariei.entity.Evento;
 import com.facens.arenaace.voluntariei.entity.Ong;
 import com.facens.arenaace.voluntariei.exceptions.RegraNegocioException;
@@ -40,26 +43,42 @@ public class EventoServiceImpl implements EventoServiceUseCase {
 
     @Override
     public EventoDTO obterEventoPorID(Integer id) {
-        // TODO Auto-generated method stub
-        return null;
+        return  eventoRepository.findById(id).map(e -> EventoDTO
+                .builder()
+                .nome(e.getNome())
+                .data(e.getData())
+                .descricao(e.getDescricao())
+                .ong(e.getOng().getId())
+                .build()).orElseThrow(()-> new RegraNegocioException("Evento não encontrado"));
     }
 
     @Override
     public void remover(Integer id) {
-        // TODO Auto-generated method stub
-        
+        eventoRepository.deleteById(id);
     }
 
     @Override
     public void editar(Integer id, EventoDTO dto) {
-        // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public ArrayList<EventoDTO> obterEventos() {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<EventoDTO> dados = new ArrayList<>();
+
+
+        List<Evento> eventos = eventoRepository.findAll();
+        eventos.forEach(e -> {
+            dados.add(EventoDTO
+                    .builder()
+                    .nome(e.getNome())
+                    .data(e.getData())
+                    .descricao(e.getDescricao())
+                    .ong(e.getOng().getId())
+                    .build());
+        });
+
+        return dados;
     }
     
 }
